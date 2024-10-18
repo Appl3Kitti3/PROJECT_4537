@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Client Side</title>
+        <style>
+            h1 {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>
+            Type your prompt
+        </h1>
+
+        <!-- This is the div that maps out the AI's generated prompts as ideas -->
+        <div>
+            <button onclick="test()">
+
+            </button>
+            <button 
+            class="ai_generated_prompt"
+            >Prompt 1: Apple Juice Town </button>
+            <button
+            class="ai_generated_prompt"
+            >Prompt 2: Apple Juice Town </button>
+            <button
+            class="ai_generated_prompt">Prompt 3: Apple Juice Town </button>
+
+        </div>
+        <div>
+            <form>
+                <input type="text" id="prompt" placeholder="Type your prompt here" />
+            </form>
+        </div>
+
+        <script>
+
+            function test()
+            {
+                const buttons = document.getElementsByClassName("ai_generated_prompt");
+                
+                for (let i = 0; i < buttons.length; i++)
+                {
+                    buttons[i].addEventListener("click", function()
+                    {
+                        onPromptSelect(buttons[i]);
+                    });
+                }
+            }
+            function onPromptSelect(element)
+            {
+                let prompt = element.innerHTML;
+                document.getElementById("prompt").value = prompt;
+            }
+
+            onload = test;
+        </script>
+    </body>
+</html>

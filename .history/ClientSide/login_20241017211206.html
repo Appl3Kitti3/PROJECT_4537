@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>  
+    <head>
+        <title>Login</title>
+
+        <style>
+            /* We will move this to another CSS */
+            .main-container
+            {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: beige;
+                width: 50%;
+            }
+
+            form
+            {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            body
+            {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+        </style>
+    </head>
+    
+    <body>
+        <div class="main-container">
+            <h1>
+                Login
+            </h1>
+            
+            <form
+                action="./story.html">
+                <input type="text" id="username" placeholder="Username" />
+                <input type="password" id="password" placeholder="Password" />
+                <input type="submit" value="Login" />
+            </form>
+    
+        </div>
+
+        <script>
+            function login()
+            {
+                // Get the username and password from the input fields
+                let username = document.getElementById("username").value;
+                let password = document.getElementById("password").value;
+
+                // Fetch API call from Database
+                // if that 
+                // Check if the username and password are correct
+                if (username === "admin" && password === "password")
+                {
+                    // Redirect to the story page
+                    window.location.href = "./story.html";
+                }
+                else
+                {
+                    // Show an alert if the username or password is incorrect
+                    alert("Incorrect username or password. Please try again.");
+                }
+            }
+        </script>
+    </body>
+</html>

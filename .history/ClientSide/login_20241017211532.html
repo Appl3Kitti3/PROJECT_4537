@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>  
+    <head>
+        <title>Login</title>
+
+        <style>
+            /* We will move this to another CSS */
+            .main-container
+            {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: beige;
+                width: 50%;
+            }
+
+            form
+            {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            body
+            {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+        </style>
+    </head>
+    
+    <body>
+        <div class="main-container">
+            <h1>
+                Login
+            </h1>
+            
+            <form
+                action="./index.html"
+            >
+                <!-- Action is the API call to check if it can be autehnicated -->
+                 <!-- Method: Post btw -->
+                <input type="text" id="username" placeholder="Username" />
+                <input type="password" id="password" placeholder="Password" />
+                <input type="submit" value="Login" />
+            </form>
+    
+        </div>
+    </body>
+</html>
