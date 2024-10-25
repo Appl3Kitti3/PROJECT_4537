@@ -1,0 +1,62 @@
+.ai_generated_prompt
+{
+    font-size: 1em;
+    padding: 1%;
+    font-weight: bold;
+    color: white;
+    box-shadow: 1px 1px 5px 0.3px #000000;
+    border-radius: 10px;
+    background-color: coral;
+}
+
+.prompt_choices, .description
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.description
+{
+    padding: 1%;
+    width: 50%;
+}
+
+#story_description
+{
+    font-size: large;
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    word-wrap:break-word;
+    padding: 2%;
+    border-radius: 15px;
+    box-shadow: 2px 1px 7px 0.3px #000000;
+    background-color: white;
+}
+
+.ai_generated_prompt:hover
+{
+    cursor: pointer;
+}
+
+.ai_generated_prompt:active
+{
+    background-color: red;
+}
+
+.body-container
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navigation_button
+{
+    background-color: coral;
+    font-weight: bold;
+    border: none;
+    box-shadow: 1px 1px 5px 0.3px #000000;
+    padding: 1%;
+
+}

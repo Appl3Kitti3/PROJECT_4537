@@ -2,24 +2,9 @@
 <html>  
     <head>
         <title>Login</title>
+        <link rel="stylesheet" href="./public/styles/styles.css">
 
         <style>
-            /* We will move this to another CSS */
-            .main-container
-            {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                background-color: beige;
-                width: 50%;
-            }
-
-            form
-            {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
 
             body
             {
@@ -33,13 +18,14 @@
     </head>
     
     <body>
-        <div class="main-container">
+        <div class="main_container">
             <h1>
                 Login
             </h1>
             
             <form
-                action="./index.html"
+                id="login_form"
+                action="loginAction()"
             >
                 <!-- Action is the API call to check if it can be autehnicated -->
                  <!-- Method: Post btw -->
@@ -49,5 +35,36 @@
             </form>
     
         </div>
+        <script>
+            // const loginAction = () => {
+            //     const form = document.getElementById("login_form");
+            //     form.addEventListener("submit", (e) => {
+            //         e.preventDefault();
+            //         const username = document.getElementById("username").value;
+            //         const password = document.getElementById("password").value;
+            //         console.log(username, password);
+
+            //         createToken(username, password);
+            //         // Make an API call to authenticate the user
+
+            //         // If the user is authenticated, redirect to the story page
+            //         window.location.href = "./index.html";
+            //     });
+            // }
+
+            const thing = new Promise((res, rej) => {
+                rej();
+            }).then(() => {
+                console.log("Hello");
+            },
+            () => {
+                console.log("Goodbye");
+            }
+        
+        )
+
+            onload = thing;
+        </script>
+        <!-- <script src="./public/scripts/authenicateScript.js"></script> -->
     </body>
 </html>

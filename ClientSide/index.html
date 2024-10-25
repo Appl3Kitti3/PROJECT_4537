@@ -2,31 +2,23 @@
 <html>
     <head>
         <title>Client Side</title>
+        <link rel="stylesheet" href="./public/styles/styles.css">
+
         <style>
             h1 {
                 color: red;
             }
-
-            .suggestions_container, .main_container, form
-            {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }  
             
             .suggestions_container
             {
                 gap: 10px;
             }
 
-            .main_container
+            body
             {
-                padding: 5%;
-            }
-
-            form
-            {
-                gap: 15px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
             }
 
         </style>
@@ -39,7 +31,9 @@
         </h1>
 
         <!-- This is the div that maps out the AI's generated prompts as ideas -->
-        <div class="suggestions_container">
+        <div 
+        id="suggestions_container"
+        >
             <button 
             class="ai_generated_prompt"
             >Prompt 1: Apple Juice Town </button>
@@ -52,6 +46,7 @@
         </div>
         <div class="main_container">
             <form
+            id="index_form"
             action="./story.html">
                 <input type="text" id="prompt" placeholder="Type your prompt here" />
 
@@ -61,6 +56,12 @@
 
         <script>
 
+            // const authenticate = () => {
+            //     if (authenicate)
+            //     {
+            //         test();
+            //     }   
+            // }
             function test()
             {
                 const buttons = document.getElementsByClassName("ai_generated_prompt");
@@ -81,5 +82,6 @@
 
             onload = test;
         </script>
+        <!-- <script src="./public/scripts/authenicateScript.js"></script> -->
     </body>
 </html>
