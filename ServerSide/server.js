@@ -84,7 +84,7 @@ class Server {
 
   async generateStory(prompt) {
     const storyOutput = await this.generator(prompt, {
-      max_length: 150,
+      max_length: 100,
       num_return_sequences: 1,
       no_repeat_ngram_size: 2,
       do_sample: true,
