@@ -1,6 +1,7 @@
 const http = require('http');
 const jwt = require('jsonwebtoken');
 const url = require('url');
+const { pipeline } = require('@xenova/transformers');
 
 const API_EndPoints = [
     "/api/register",
