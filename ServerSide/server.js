@@ -160,5 +160,5 @@ class Server {
   }
 }
 
-const serverInstance = new Server(8080);
+const serverInstance = new Server(process.env.PORT);
 serverInstance.start();

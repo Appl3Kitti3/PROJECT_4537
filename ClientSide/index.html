@@ -20,7 +20,7 @@
       const prompt = document.getElementById('prompt').value;
 
       try {
-        const response = await fetch('http://localhost:8080/api/generate-story', {
+        const response = await fetch('https://isa-term-project-e2902e646c5c.herokuapp.com/api/generate-story', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt }),
