@@ -13,7 +13,7 @@ class Server {
 
   async loadModel() {
     console.log('Loading model...');
-    this.generator = await pipeline('text-generation', 'Xenova/distilbert');
+    this.generator = await pipeline('text-generation', 'Xenova/gpt-neo-125M');
     console.log('Model loaded.');
   }
 
