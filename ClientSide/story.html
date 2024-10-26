@@ -1,111 +1,156 @@
+<!-- story.html -->
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <title>Client Side - Story</title>
-        <link rel="stylesheet" href="./public/styles/styles.css">
-        <link rel="stylesheet" href="./public/styles/story.css">
-        <style>
-
-            body
-            {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                padding: 1%;
-            }
-
-        </style>
-    </head>
-
-    <body>
-        
-        <div
-        class="body-container">
-            <button
-            class="navigation_button"
-            >
-                &lt; Back
-            </button>
-            <div class="main_container">
-                <h1
-                id="userName_header"
-                ></h1>
-        
-                <div 
-                id="story-container"
-                >
-                    <div
-                    id="story-image"
-                    class="image-container">
-                    </div>
-                    
-                    <div class="description">
-                        <p
-                        id="page_number"
-                        >
-                            Page 1 of Something
-                        </p>
-                        <p
-                        id="story_description"
-                        ></p>
-                        
-                        <!-- Use mock data to fill this in. Maximum of 4 suggested prompts -->
-                        <div 
-                        id="prompt_choices"
-                        class="prompt_choices">
-                        </div>
-                    </div>
-                </div>
-            </div>  
-            <button 
-            class="navigation_button"
-            >
-                > Next
-            </button>
+<head>
+  <title>Your Adventure Story</title>
+  <link rel="stylesheet" href="./public/styles/styles.css">
+  <link rel="stylesheet" href="./public/styles/story.css">
+</head>
+<body>
+  <div class="body-container">
+    <button class="navigation_button" id="backButton">&lt; Back</button>
+    <div class="main_container">
+      <h1 id="userName_header"></h1>
+      <div id="story-container">
+        <div id="story-image" class="image-container">
+          <img src="./public/imgs/house.jpg" alt="Story Image" id="storyImage">
         </div>
-        
-        
-        <script>
-            // This is where the AI generated story will be displayed
-            // This is where the user will be able to choose a prompt to continue the story
-            const storyDescription = document.getElementById("story_description");
-            const promptChoicesDiv = document.getElementById("prompt_choices");
-            const storyImage = document.getElementById("story-image");
-            const userNameHeader = document.getElementById("userName_header");
-            const storyImageElement = document.createElement("img");
-            const pageNumberElement = document.getElementById("page_number");
-            const mockName = "franlink2024uwu";
+        <div class="description">
+          <p id="page_number">Page 1</p>
+          <p id="story_description"></p>
+          <div id="prompt_choices" class="prompt_choices"></div>
+        </div>
+      </div>
+    </div>
+    <button class="navigation_button" id="nextButton">&gt; Next</button>
+  </div>
 
-            const exampleDescription = "In a secluded forest, a kind-hearted gnome named Elwin lived in a cozy, round house with a thatched roof. Each morning, Elwin fetched water from the stone well and tended to his vibrant garden. One sunny day, while repairing the roof, he heard a splash from the waterfall. Investigating, he found a golden fish in distress, removed a thorn from its fin, and returned it to the pond. To his surprise, the fish transformed into a fairy who granted him three wishes: for the forest to stay lush, the well to never dry, and for the fairy to visit often. The forest grew even more magical, with the fairy's regular visits bringing joy and enchantment to Elwin's life.";
+  <script>
+    // Retrieve the story text and prompt options
+    let storyText = localStorage.getItem('storyText') || '';
+    const promptOptions = JSON.parse(localStorage.getItem('promptOptions'));
 
-            const examplePrompts = [
-                "Elwin’s first wish brings unexpected visitors to the forest, leading to an adventure to protect the magical land.", "The fairy's visits reveal hidden secrets about the forest and its ancient inhabitants, prompting Elwin to embark on a quest.", "A mysterious traveler arrives at Elwin's doorstep, seeking help to find a lost treasure rumored to be hidden near the waterfall."
-            ];
+    if (storyText) {
+      document.getElementById('story_description').innerText = storyText;
+    } else {
+      // If no story text is found, redirect back to the index page
+      window.location.href = 'index.html';
+    }
 
-            const exampleImageURL = "./public/imgs/house.jpg";
+    // Display the prompt options
+    const promptChoicesDiv = document.getElementById('prompt_choices');
+    if (promptOptions && promptOptions.length > 0) {
+      promptChoicesDiv.innerHTML = ''; // Clear existing prompts
+      promptOptions.forEach((suggestion, index) => {
+        const button = document.createElement('button');
+        button.classList.add('ai_generated_prompt');
+        button.innerHTML = `Option ${index + 1}: ${suggestion}`;
+        promptChoicesDiv.appendChild(button);
 
-            const totalpageNumber = 4;
-            const currentPageNumber = 1;            
-
-            userNameHeader.innerHTML = `Welcome, ${mockName} to your story!`;
-
-            pageNumberElement.innerHTML = `Page ${currentPageNumber} of ${totalpageNumber}`;
-            
-            storyImageElement.src = exampleImageURL;
-            storyImageElement.alt = "AI Generated Image to describe the story";
-            storyImage.appendChild(storyImageElement);
-
-            storyDescription.innerHTML = exampleDescription;
-
-            examplePrompts.forEach((suggestion, index) => {
-                const button = document.createElement("button");
-                button.classList.add("ai_generated_prompt");
-                button.innerHTML = `Prompt ${index + 1}: ${suggestion.substring(0, 50)}...`;
-                promptChoicesDiv.appendChild(button);
+        // Add event listener for button click
+        button.addEventListener('click', async () => {
+          // Handle prompt selection
+          try {
+            const response = await fetch('http://localhost:8080/api/generate-story', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                prompt: suggestion,
+              }),
             });
-        </script>
-    </body>
+
+            if (response.ok) {
+              const data = await response.json();
+              const newStoryPart = data.generatedStoryPart;
+              storyText = newStoryPart; // Replace the story text with the new part
+              localStorage.setItem('storyText', storyText);
+              localStorage.setItem('promptOptions', JSON.stringify(data.promptOptions));
+
+              // Update current page number
+              let currentPageNumber = parseInt(localStorage.getItem('currentPageNumber')) || 1;
+              currentPageNumber += 1;
+              localStorage.setItem('currentPageNumber', currentPageNumber.toString());
+
+              // Update the displayed story and prompts without page reload
+              document.getElementById('story_description').innerText = storyText;
+              displayPrompts(data.promptOptions);
+              pageNumberElement.innerHTML = `Page ${currentPageNumber}`;
+            } else {
+              alert('Error generating the next part of the story');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while generating the next part of the story.');
+          }
+        });
+      });
+    } else {
+      // If no prompts are found, show a message
+      promptChoicesDiv.innerHTML = '<p>No prompts available.</p>';
+    }
+
+    // Function to display new prompts without reloading the page
+    function displayPrompts(newPromptOptions) {
+      promptChoicesDiv.innerHTML = ''; // Clear existing prompts
+      newPromptOptions.forEach((suggestion, index) => {
+        const button = document.createElement('button');
+        button.classList.add('ai_generated_prompt');
+        button.innerHTML = `Option ${index + 1}: ${suggestion}`;
+        promptChoicesDiv.appendChild(button);
+
+        // Add event listener for button click
+        button.addEventListener('click', async () => {
+          // Handle prompt selection
+          try {
+            const response = await fetch('http://localhost:8080/api/generate-story', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                prompt: suggestion,
+              }),
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              const newStoryPart = data.generatedStoryPart;
+              storyText = newStoryPart; // Replace the story text with the new part
+              localStorage.setItem('storyText', storyText);
+              localStorage.setItem('promptOptions', JSON.stringify(data.promptOptions));
+
+              // Update current page number
+              let currentPageNumber = parseInt(localStorage.getItem('currentPageNumber')) || 1;
+              currentPageNumber += 1;
+              localStorage.setItem('currentPageNumber', currentPageNumber.toString());
+
+              // Update the displayed story and prompts without page reload
+              document.getElementById('story_description').innerText = storyText;
+              displayPrompts(data.promptOptions);
+              pageNumberElement.innerHTML = `Page ${currentPageNumber}`;
+            } else {
+              alert('Error generating the next part of the story');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while generating the next part of the story.');
+          }
+        });
+      });
+    }
+
+    // Update other elements as needed
+    const userNameHeader = document.getElementById('userName_header');
+    const mockName = 'Adventurer'; // Replace with actual user name if available
+    userNameHeader.innerHTML = `Welcome, ${mockName}, to your story!`;
+
+    // Update page number
+    const pageNumberElement = document.getElementById('page_number');
+    const currentPageNumber = parseInt(localStorage.getItem('currentPageNumber')) || 1;
+    pageNumberElement.innerHTML = `Page ${currentPageNumber}`;
+
+    // Back Button Functionality
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
 </html>

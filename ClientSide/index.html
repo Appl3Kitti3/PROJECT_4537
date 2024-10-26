@@ -1,87 +1,48 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Client Side</title>
-        <link rel="stylesheet" href="./public/styles/styles.css">
+<head>
+  <title>Start Your Adventure</title>
+  <link rel="stylesheet" href="./public/styles/styles.css">
+</head>
+<body>
+  <h1>Type your prompt</h1>
+  <div class="main_container">
+    <form id="index_form">
+      <input type="text" id="prompt" placeholder="Type your prompt here" required />
+      <input type="submit" value="Start your adventure!" />
+    </form>
+  </div>
 
-        <style>
-            h1 {
-                color: red;
-            }
-            
-            .suggestions_container
-            {
-                gap: 10px;
-            }
+  <script>
+    document.getElementById('index_form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const prompt = document.getElementById('prompt').value;
 
-            body
-            {
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-            }
+      try {
+        const response = await fetch('http://localhost:8080/api/generate-story', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt }),
+        });
 
-        </style>
-
-        
-    </head>
-    <body>
-        <h1>
-            Type your prompt
-        </h1>
-
-        <!-- This is the div that maps out the AI's generated prompts as ideas -->
-        <div 
-        id="suggestions_container"
-        >
-            <button 
-            class="ai_generated_prompt"
-            >Prompt 1: Apple Juice Town </button>
-            <button
-            class="ai_generated_prompt"
-            >Prompt 2: Apple Juice Town </button>
-            <button
-            class="ai_generated_prompt">Prompt 3: Apple Juice Town </button>
-
-        </div>
-        <div class="main_container">
-            <form
-            id="index_form"
-            action="./story.html">
-                <input type="text" id="prompt" placeholder="Type your prompt here" />
-
-                <input type="submit" value="Start your adventure!" />
-            </form>
-        </div>
-
-        <script>
-
-            // const authenticate = () => {
-            //     if (authenicate)
-            //     {
-            //         test();
-            //     }   
-            // }
-            function test()
-            {
-                const buttons = document.getElementsByClassName("ai_generated_prompt");
-                
-                for (let i = 0; i < buttons.length; i++)
-                {
-                    buttons[i].addEventListener("click", function()
-                    {
-                        onPromptSelect(buttons[i]);
-                    });
-                }
-            }
-            function onPromptSelect(element)
-            {
-                let prompt = element.innerHTML;
-                document.getElementById("prompt").value = prompt;
-            }
-
-            onload = test;
-        </script>
-        <!-- <script src="./public/scripts/authenicateScript.js"></script> -->
-    </body>
+        if (response.ok) {
+          const data = await response.json();
+          // Store the generated story and prompts in localStorage
+          localStorage.setItem('storyText', data.generatedStoryPart);
+          localStorage.setItem('promptOptions', JSON.stringify(data.promptOptions));
+          // Reset current page number
+          localStorage.setItem('currentPageNumber', '1');
+          // Redirect to the story page
+          window.location.href = 'story.html';
+        } else {
+          alert('Error generating story');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while generating the story.');
+      }
+    });
+  </script>
+</body>
 </html>
