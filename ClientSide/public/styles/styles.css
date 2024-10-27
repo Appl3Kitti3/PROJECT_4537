@@ -1,17 +1,21 @@
 
-.main_container, #suggestions_container, #login_form, #index_form, #story-container
+.main_container, #suggestions_container, #login_form, #index_form, #story-container, #mainContent
 {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
 }
 
-.main_container
+#mainContent
 {
     justify-content: center;
-    /* height: 100vh; */
-    background-color: #f0f0f0;
+    gap: 10px;
+    padding: 7%;
+}
+.main_container
+{
+    /* background-color: #f0f0f0; */
     padding: 5%;
-    /* width: 50%; */
+    width: 100%;
     border-radius: 25px;
 }
 
@@ -49,7 +53,6 @@
 }
 .image-container
 {
-    border: 1px solid black;
     width: 50%;
     height: 100%;
 }
@@ -59,4 +62,16 @@
     width: 100%;
     border-radius: 25px;
     box-shadow: 2px 1px 7px 0.3px #000000;
+}
+
+.anchorLinkDesign
+{
+    text-decoration: underline;
+    color: #0000EE;
+    cursor: pointer;
+}
+
+.anchorLinkDesign:active
+{
+    color: #FF0000;
 }

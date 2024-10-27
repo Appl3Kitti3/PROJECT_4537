@@ -20,18 +20,24 @@
 {
     padding: 1%;
     width: 50%;
+
 }
 
 #story_description
 {
-    font-size: large;
+    font-size: x-large;
+    font-style: italic;
     letter-spacing: 1px;
     word-spacing: 2px;
     word-wrap:break-word;
     padding: 2%;
     border-radius: 15px;
+    max-height: 340px;
+    overflow: auto;
+    scrollbar-width: none;
     box-shadow: 2px 1px 7px 0.3px #000000;
-    background-color: white;
+    color: black;
+    
 }
 
 .ai_generated_prompt:hover
@@ -59,4 +65,9 @@
     box-shadow: 1px 1px 5px 0.3px #000000;
     padding: 1%;
 
+}
+
+#mainContent
+{
+    background-color: #C09B87;
 }

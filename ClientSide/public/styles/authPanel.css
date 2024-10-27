@@ -1,0 +1,12 @@
+body
+{
+    background-image: url('../imgs/panel.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.form_container
+{
+    /* background-color: white; */
+    border-radius: 25px;
+}
