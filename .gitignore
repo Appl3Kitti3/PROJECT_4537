@@ -1,3 +1,4 @@
 .history
-
+.env
+Procfile
 node_modules
