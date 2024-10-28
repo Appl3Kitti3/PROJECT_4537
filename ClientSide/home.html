@@ -1,0 +1,90 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Start Your Adventure</title>
+  <link rel="stylesheet" href="./public/styles/styles.css">  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+  <header id="header"></header>
+
+  <main id="mainContent">
+    <div class="text-center main_container shadow-lg">
+      <!-- <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
+      <h1 class="display-5 fw-bold text-body-emphasis">Type Your Prompt</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">
+          Let us start your adventure by typing your prompt below. We will generate a story based on your prompt.
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+  
+          <form id="index_form">
+            <input type="text" id="prompt" placeholder="Type your prompt here" required />
+            <input type="submit" value="Start your adventure!" />
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <script>
+    const API_URL = 
+    "https://isa-term-project-e2902e646c5c.herokuapp.com/api/generate-story";
+    
+    // Insert Components
+
+    // Fetch Header component
+    fetch("./components/header.html")
+      .then((response) => response.text())
+      .then((html) => {
+        document.getElementById('header').innerHTML = html;
+      });
+
+    // Actual Script Functionality
+    document.getElementById('index_form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (API_URL === "")
+      {
+        window.location.href = 'story.html';
+        return;
+      }
+      const prompt = document.getElementById('prompt').value;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Store the generated story and prompts in localStorage
+          localStorage.setItem('storyText', data.generatedStoryPart);
+          localStorage.setItem('promptOptions', JSON.stringify(data.promptOptions));
+          // Reset current page number
+          localStorage.setItem('currentPageNumber', '1');
+          // Redirect to the story page
+          window.location.href = 'story.html';
+        } else {
+          alert('Error generating story');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while generating the story.');
+      }
+    });
+
+
+  </script>
+    <script src="./public//scripts//loadComponents.js"></script>
+    <script src="./public/scripts/authenicateScript.js"></script>
+    <script src="./public/scripts/themeChanger.js"></script>
+
+</body>
+</html>
