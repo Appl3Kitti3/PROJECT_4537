@@ -15,7 +15,7 @@ export const authRoutes = {
           }
     
           // Compare the input password with the stored hash
-          const isMatch = await bcrypt.compare(password, user.password);
+          let isMatch = await bcrypt.compare(password, user.password);
           console.log('Input Password:', password);
           console.log('Stored Hashed Password:', user.password);
           console.log('Password comparison result:', isMatch);
@@ -49,14 +49,13 @@ export const authRoutes = {
       // Hash the password if it's defined
       if (!password) throw new Error("Password is required");
 
-      const hashedPassword = await bcrypt.hashSync(password, 10); // Ensure salt rounds are 10
-      console.log("Stored Hashed Password:", hashedPassword); // Debugging log
+      // Hash is not required, MongoDB automatically hashes it for you
 
       // Create a new user
       const user = new User({
         username: username.trim(),
         email: email.trim().toLowerCase(),
-        password: hashedPassword,
+        password: password,
       });
 
       await user.save();
