@@ -32,8 +32,8 @@
   </main>
 
   <script>
-    const API_URL = 
-    "https://isa-term-project-e2902e646c5c.herokuapp.com/api/generate-story";
+    const API_URL = "http://localhost:8080";
+    // "https://isa-term-project-e2902e646c5c.herokuapp.com";
     
     // Insert Components
 
@@ -48,15 +48,15 @@
     document.getElementById('index_form').addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      if (API_URL === "")
-      {
-        window.location.href = 'story.html';
-        return;
-      }
+      // if (API_URL === "")
+      // {
+      //   window.location.href = 'story.html';
+      //   return;
+      // }
       const prompt = document.getElementById('prompt').value;
 
       try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_URL}/api/generate-story`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt }),
