@@ -31,7 +31,7 @@
           <div class="col-md-10 mx-auto col-lg-5">
             <!-- The action calls the API with respected body from the Form -->
             <form id="loginForm"
-              onsubmit="onLogin(event)"
+              onsubmit="{onLogin(event);}"
               class="p-4 p-md-5 border rounded-3 bg-body-tertiary"
             >
               <div class="form-floating mb-3">
@@ -81,71 +81,13 @@
         </div>
       </div>
     </div>
-    <script>
-      const username = "Adventurer";
-      const mockData = {
-        title: `Your remaining usages, ${username}`,
-        description: "You have 18 remaining out of 20 API consumptions left!",
-      };
+    <!-- <script type="module">
 
-      const API_BASE = "http://localhost:8080";
-      // "https://isa-term-project-e2902e646c5c.herokuapp.com";
-      const onLogin = async (event) => {
-        event.preventDefault(); // Prevent page reload on form submit
+      import { isValidatedPromise, GetUserPromise } from './public/scripts/loadComponents.js';
 
-        // Disable the login button to prevent multiple submissions
-        const loginButton = document.getElementById("loginButton");
-        loginButton.toggleAttribute("disabled");
-
-        // Collect email and password from input fields
-        const email = document.getElementById("floatingInput").value;
-        const password = document.getElementById("floatingPassword").value;
-
-        try {
-          // Make a POST request to the login API
-          const response = await fetch(`${API_BASE}/api/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-          });
-
-          // Parse the response JSON
-          const data = await response.json();
-
-          if (response.ok) {
-            // If login is successful, store the JWT token in localStorage
-            localStorage.setItem("token", data.token);
-
-            // Display the remaining API usage (example mock)
-            document.getElementById(
-              "panel"
-            ).innerHTML = `<h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">
-                    ${mockData.title}
-                </h1>
-                <p class="col-lg-10 fs-4">
-                    ${mockData.description}
-                </p>
-                <button
-                    class="w-50 btn btn-lg btn-primary"
-                    onclick="window.location.href = 'home.html'">
-                    Home
-                </button>`;
-          } else {
-            // If login failed, show an alert with the error message
-            alert(data.error || "Login failed. Please try again.");
-
-            // Re-enable the login button
-            loginButton.removeAttribute("disabled");
-          }
-        } catch (error) {
-          // Handle network errors
-          console.error("Error:", error);
-          alert("Network error. Please try again later.");
-
-          // Re-enable the login button
-          loginButton.removeAttribute("disabled");
-        }
-      };
+    </script> -->
+    <!-- <script "></script> -->
+    <script >
     </script>
     <script src="./public/scripts/authenicateScript.js"></script>
     <script src="./public/scripts/themeChanger.js"></script>

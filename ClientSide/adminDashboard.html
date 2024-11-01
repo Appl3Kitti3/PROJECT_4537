@@ -34,8 +34,8 @@
   </main>
 
   <script>
-    const API_URL = 
-    "https://isa-term-project-e2902e646c5c.herokuapp.com/api/generate-story";
+    const API_URL = "http://localhost:8080";
+    // "https://isa-term-project-e2902e646c5c.herokuapp.com/api/generate-story";
     
     let arr = [
       {
@@ -66,20 +66,57 @@
     // Actual Script Functionality
     const table = document.getElementById("userTable");
 
-    for (let i = 0; i < arr.length; i++)
-    {
-      table.innerHTML += `<tr>
-            <th scope="row">${i+1}</th>
-            <td>${arr[i].role.toUpperCase()}</td>
-            <td>${arr[i].username}</td>
-            <td>${arr[i].email}</td>
-            <td>${arr[i].apiConsumption}</td>
-          </tr>`; 
+    const getUsers = async () => {
+      const users = await fetch(`${API_URL}/api/admin/users`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await users.json();
+      arr = data.users;
+      table.innerHTML = data.users.map((user, index) => {
+        return `<tr>
+          <th scope="row">${(user._id + "").substring(0,6)}...</th>
+          <td>${user.role.toUpperCase()}</td>
+          <td>${user.username}</td>
+          <td>${user.email}</td>
+          <td>${user.api_consumptions} / 20</td>
+        </tr>`;
+      }).join('');
     }
 
+    getUsers();
+
+    // for (let i = 0; i < arr.length; i++)
+    // {
+    //   table.innerHTML += `<tr>
+    //         <th scope="row">${i+1}</th>
+    //         <td>${arr[i].role.toUpperCase()}</td>
+    //         <td>${arr[i].username}</td>
+    //         <td>${arr[i].email}</td>
+    //         <td>0</td>
+    //       </tr>`; 
+    // }
 
   </script>
-    <script src="./public//scripts//loadComponents.js"></script>
+
+  <script type="module">
+
+    import { loadHeader, validateAndGetUser } from './public/scripts/loadComponents.js';
+
+    loadHeader();
+    let userData = null;
+    await validateAndGetUser().then((data) => {
+      userData = data;
+    });
+
+    if (userData.user.role !== "admin")
+    {
+      window.location.href = 'home.html';
+    }
+    
+  </script>
+
     <script src="./public/scripts/authenicateScript.js"></script>
     <script src="./public/scripts/themeChanger.js"></script>
 </body>

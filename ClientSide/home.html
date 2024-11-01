@@ -12,7 +12,14 @@
   <main id="mainContent">
     <div class="text-center main_container shadow-lg">
       <!-- <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-      <h1 class="display-5 fw-bold text-body-emphasis">Type Your Prompt</h1>
+      <h1 
+      id="greeting"
+      class="display-5 fw-bold text-body-emphasis">
+        
+      </h1>
+      <h2>
+        Type a prompt to start your adventure!
+      </h2>
       <div class="col-lg-6 mx-auto">
         <p class="lead mb-4">
           Let us start your adventure by typing your prompt below. We will generate a story based on your prompt.
@@ -36,13 +43,6 @@
     // "https://isa-term-project-e2902e646c5c.herokuapp.com";
     
     // Insert Components
-
-    // Fetch Header component
-    fetch("./components/header.html")
-      .then((response) => response.text())
-      .then((html) => {
-        document.getElementById('header').innerHTML = html;
-      });
 
     // Actual Script Functionality
     document.getElementById('index_form').addEventListener('submit', async (e) => {
@@ -80,9 +80,29 @@
       }
     });
 
+  // const rawr = validateAndGetUser.then((data) => {
+  //   console.log(data);
+  // });
+            // greetingHTML.innerHTML = `Welcome, ${data.user.username}!`;
+
 
   </script>
-    <script src="./public//scripts//loadComponents.js"></script>
+  <script type="module">
+
+    import { loadHeader, validateAndGetUser } from './public/scripts/loadComponents.js';
+
+    loadHeader();
+    const greetingHTML = document.getElementById('greeting');
+
+    let userData = null;
+    await validateAndGetUser().then((data) => {
+      userData = data;
+    });
+
+    greetingHTML.innerHTML = `Welcome, ${userData.user.username}!`;
+    
+  </script>
+    <!-- <script src="./public/scripts/loadComponents.js"></script> -->
     <script src="./public/scripts/authenicateScript.js"></script>
     <script src="./public/scripts/themeChanger.js"></script>
 

@@ -65,13 +65,6 @@
     const API_URL = "http://localhost:8080";
     // "https://isa-term-project-e2902e646c5c.herokuapp.com";
 
-    // Fetch the header component
-    fetch("./components/header.html")
-      .then((response) => response.text())
-      .then((html) => {
-        document.getElementById("header").innerHTML = html;
-      });
-
     // Retrieve the story text and prompt options
     let storyText = localStorage.getItem('storyText') || '';
     const promptOptions = JSON.parse(localStorage.getItem('promptOptions'));
@@ -79,8 +72,9 @@
     if (storyText) {
       document.getElementById('story_description').innerText = storyText;
     } else {
+      alert("No story text found, try typing a prompt!");
       // If no story text is found, redirect back to the index page
-      window.location.href = 'index.html';
+      window.location.href = 'home.html';
     }
 
     // Display the prompt options
@@ -185,8 +179,6 @@
 
     // Update other elements as needed
     const userNameHeader = document.getElementById('userName_header');
-    const mockName = 'Adventurer'; // Replace with actual user name if available
-    userNameHeader.innerHTML = `Welcome, ${mockName}, to your story!`;
 
     // Update page number
     const pageNumberElement = document.getElementById('page_number');
@@ -195,10 +187,24 @@
 
     // Back Button Functionality
     document.getElementById('backButton').addEventListener('click', () => {
-      window.location.href = 'index.html';
+      window.location.href = 'home.html';
     });
   </script>
-    <script src="./public//scripts//loadComponents.js"></script>
+  <script type="module">
+
+    import { loadHeader, validateAndGetUser } from './public/scripts/loadComponents.js';
+    loadHeader();
+
+    let userData = null;
+    await validateAndGetUser().then((data) => {
+      userData = data;
+    });
+
+    userNameHeader.innerHTML = `Welcome, ${userData.user.username}! To your story!`;
+
+    
+  </script>
+    <!-- <script src="./public//scripts//loadComponents.js"></script> -->
   <script src="./public/scripts/themeChanger.js"></script>
 </body>
 </html>
