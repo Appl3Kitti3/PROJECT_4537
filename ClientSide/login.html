@@ -88,6 +88,8 @@
         description: "You have 18 remaining out of 20 API consumptions left!",
       };
 
+      const API_BASE = "http://localhost:8080";
+      // "https://isa-term-project-e2902e646c5c.herokuapp.com";
       const onLogin = async (event) => {
         event.preventDefault(); // Prevent page reload on form submit
 
@@ -101,7 +103,7 @@
 
         try {
           // Make a POST request to the login API
-          const response = await fetch("http://localhost:8080/api/auth/login", {
+          const response = await fetch(`${API_BASE}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),

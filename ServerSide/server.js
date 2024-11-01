@@ -150,21 +150,26 @@ class Server {
   }
 
   async generatePrompt(storyContext) {
-    const promptOutput = await this.generator(`${storyContext}\nNext:`, {
-      max_length: 30,
+    // console.log('Generating prompt for:', storyContext);
+    const promptOutput = await this.generator(`(NOTE: Do not include the story in your response please) Continue this story \"${storyContext}\" and then place the new input after Next:`, {
+      max_length: 200,
       num_return_sequences: 1,
       no_repeat_ngram_size: 2,
       do_sample: true,
       top_k: 50,
       top_p: 1.0,
-      temperature: 2.0,
+      temperature: 1.0,
     });
 
-    let generatedPrompt = promptOutput[0].generated_text.trim();
+    let response = promptOutput[0].generated_text;
+
+    // Extract the generated prompt from the response
+    // only get the new prompt
+    let generatedPrompt = `${response.substring(response.indexOf('Next:'))}`;
+
     if (generatedPrompt.toLowerCase().startsWith('next:')) {
       generatedPrompt = generatedPrompt.substring(5).trim();
     }
-
     return generatedPrompt.substring(0, 30).replace(/\w+$/, '').trim();
   }
 

@@ -62,8 +62,8 @@
 
   <script>
     // To make sure that we are not reusing the same string over and over
-    const API_URL = 
-    "https://isa-term-project-e2902e646c5c.herokuapp.com/api/generate-story";
+    const API_URL = "http://localhost:8080";
+    // "https://isa-term-project-e2902e646c5c.herokuapp.com";
 
     // Fetch the header component
     fetch("./components/header.html")
@@ -97,11 +97,11 @@
         button.addEventListener('click', async () => {
           // Handle prompt selection
           try {
-            const response = await fetch(API_URL, {
+            const response = await fetch(`${API_URL}/api/generate-story`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                prompt: suggestion,
+                prompt: ` ${suggestion}`,
               }),
             });
 
@@ -148,7 +148,7 @@
         button.addEventListener('click', async () => {
           // Handle prompt selection
           try {
-            const response = await fetch(API_URL, {
+            const response = await fetch(`${API_URL}/api/generate-story`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
