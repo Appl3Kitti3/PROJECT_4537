@@ -120,14 +120,14 @@
             document.getElementById(
               "panel"
             ).innerHTML = `<h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">
-                    Welcome, Adventurer!
+                    ${mockData.title}
                 </h1>
                 <p class="col-lg-10 fs-4">
-                    You have 18 remaining out of 20 API consumptions left!
+                    ${mockData.description}
                 </p>
                 <button
                     class="w-50 btn btn-lg btn-primary"
-                    onclick="window.location.href = 'index.html'">
+                    onclick="window.location.href = 'home.html'">
                     Home
                 </button>`;
           } else {

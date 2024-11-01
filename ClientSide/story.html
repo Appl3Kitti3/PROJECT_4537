@@ -90,7 +90,7 @@
       promptOptions.forEach((suggestion, index) => {
         const button = document.createElement('button');
         button.classList.add('ai_generated_prompt');
-        button.innerHTML = `Option ${index + 1}: ${suggestion}`;
+        button.innerHTML = `Option ${index + 1}: ${suggestion}...`;
         promptChoicesDiv.appendChild(button);
 
         // Add event listener for button click
