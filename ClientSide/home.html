@@ -1,4 +1,4 @@
-<!-- index.html -->
+<!-- home.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,72 +37,22 @@
 
 
   </main>
-
-  <script>
-    const API_URL = "http://localhost:8080";
-    // "https://isa-term-project-e2902e646c5c.herokuapp.com";
-    
-    // Insert Components
-
-    // Actual Script Functionality
-    document.getElementById('index_form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // if (API_URL === "")
-      // {
-      //   window.location.href = 'story.html';
-      //   return;
-      // }
-      const prompt = document.getElementById('prompt').value;
-
-      try {
-        const response = await fetch(`${API_URL}/api/generate-story`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          // Store the generated story and prompts in localStorage
-          localStorage.setItem('storyText', data.generatedStoryPart);
-          localStorage.setItem('promptOptions', JSON.stringify(data.promptOptions));
-          // Reset current page number
-          localStorage.setItem('currentPageNumber', '1');
-          // Redirect to the story page
-          window.location.href = 'story.html';
-        } else {
-          alert('Error generating story');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while generating the story.');
-      }
-    });
-
-  // const rawr = validateAndGetUser.then((data) => {
-  //   console.log(data);
-  // });
-            // greetingHTML.innerHTML = `Welcome, ${data.user.username}!`;
-
-
-  </script>
   <script type="module">
 
     import { loadHeader, validateAndGetUser } from './public/scripts/loadComponents.js';
+    import { Dashboard } from './public/scripts/dashboard.js';
 
     loadHeader();
     const greetingHTML = document.getElementById('greeting');
 
-    let userData = null;
     await validateAndGetUser().then((data) => {
-      userData = data;
+      new Dashboard(data);
+      greetingHTML.innerHTML = `Welcome, ${data.user.username}!`;
     });
 
-    greetingHTML.innerHTML = `Welcome, ${userData.user.username}!`;
+    
     
   </script>
-    <!-- <script src="./public/scripts/loadComponents.js"></script> -->
     <script src="./public/scripts/authenicateScript.js"></script>
     <script src="./public/scripts/themeChanger.js"></script>
 

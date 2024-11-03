@@ -55,14 +55,14 @@ async function validateAndGetUser() {
           }, async () => {
             // Reject 2
             // If unable to get user
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
           }
         )
     }, 
     async () => {
       // Reject 1
       // If user not authenicated, navigate to login
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
   );
 }

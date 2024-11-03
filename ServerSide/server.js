@@ -68,6 +68,11 @@ class Server {
       case '/api/auth/user':
         if (!isPostMethod) await this.handleGetUser(req, res);
         break;
+
+      case '/api/update-user':
+        if (isPostMethod) await this.handleUpdateUser(req, res);
+        break;
+
       default:
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Route not found' }));
@@ -78,6 +83,9 @@ class Server {
     // gets id from request body
     const body = await this.getRequestBody(req);
     const { id, options } = JSON.parse(body);
+
+    // updates user with id and options
+    const result = await userRoutes.updateUser(id, options);
   }
   async handleGetUser(req, res) {
     const token = req.headers.authorization.split(' ')[1];
@@ -113,7 +121,7 @@ class Server {
   async handleGenerateStory(req, res) {
     try {
       const body = await this.getRequestBody(req);
-      const { prompt } = JSON.parse(body);
+      const { prompt, userId } = JSON.parse(body);
 
       console.log('Received prompt:', prompt);
 
@@ -123,6 +131,13 @@ class Server {
       for (let i = 0; i < 4; i++) {
         const generatedPrompt = await this.generatePrompt(generatedStoryPart);
         promptOptions.push(generatedPrompt);
+      }
+
+      const result = await userRoutes.updateUser(userId, { $push: { stories: generatedStoryPart }, $inc: { api_consumptions: -1 } });
+      if (!(result.success))
+      {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: result.error  }));
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });

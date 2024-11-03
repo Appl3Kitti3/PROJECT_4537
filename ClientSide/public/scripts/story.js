@@ -1,0 +1,8 @@
+class Story
+{
+    
+    init()
+    {
+
+    }
+}
