@@ -2,7 +2,33 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// Place this in .env
+const SECRET_KEY = "secret";
+
 export const authRoutes = {
+    async isTokenValid(token) {
+        try {
+    
+          jwt.verify(token, SECRET_KEY);
+          return { success: true, valid: true };
+        } catch (error) {
+          console.error('Token validation error:', error);
+          return { success: false, error: 'Invalid token' };
+        }
+    },
+
+    async decodeToken(token)
+    {
+        try
+        {
+          const decoded = jwt.verify(token, SECRET_KEY);
+          return { success: true, decoded: decoded };
+        } catch (error) {
+          console.error('Token decoding error:', error);
+          return { success: false, error: 'Invalid token' };
+        }
+    },
+    
     async login(email, password) {
         try {
           console.log('Login attempt:', { email, password });
@@ -24,7 +50,7 @@ export const authRoutes = {
             return { success: false, error: 'Invalid credentials. Incorrect password.' };
           }
     
-          const token = jwt.sign({ id: user._id, email: user.email }, 'secret', { expiresIn: '1h' });
+          const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
     
           console.log('Login successful:', user.email);
           return { success: true, token };

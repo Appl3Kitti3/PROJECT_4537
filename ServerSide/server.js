@@ -4,6 +4,7 @@ import { pipeline } from '@xenova/transformers';
 import connectDB from './db.js'; // MongoDB connection
 import dotenv from 'dotenv'; // Environment variables
 import { authRoutes } from './routes/auth.js'; // Ensure correct import
+import { adminRoutes, userRoutes } from './routes/admin.js'; // Ensure correct import
 
 dotenv.config(); // Load environment variables
 
@@ -30,7 +31,7 @@ class Server {
   async handleRequest(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     const parsedUrl = url.parse(req.url, true);
     const method = req.method;
@@ -56,10 +57,57 @@ class Server {
         if (isPostMethod) await this.handleRegister(req, res);
         break;
 
+      case '/api/admin/users':
+        if (!isPostMethod) await this.handleAdminDashboard(req, res);
+        break;
+
+      case '/api/auth/check-token':
+        if (!isPostMethod) await this.handleCheckToken(req, res);
+        break;
+
+      case '/api/auth/user':
+        if (!isPostMethod) await this.handleGetUser(req, res);
+        break;
       default:
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Route not found' }));
     }
+  }
+
+  async handleUpdateUser(req, res) {
+    // gets id from request body
+    const body = await this.getRequestBody(req);
+    const { id, options } = JSON.parse(body);
+  }
+  async handleGetUser(req, res) {
+    const token = req.headers.authorization.split(' ')[1];
+    const result = await authRoutes.decodeToken(token);
+
+    if (result.success) {
+      const { id } = result.decoded;
+      const userResult = await userRoutes.getUserbyId(id);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ user: userResult.user }));
+    }
+    else
+    {      
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid token' }));
+    }
+
+  }
+  async handleCheckToken(req, res) {
+      const token = req.headers.authorization.split(' ')[1];
+      const result = await authRoutes.isTokenValid(token);
+      if (result.success) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ valid: result.valid }));
+      }
+      else
+      {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: result.error }));
+      }
   }
 
   async handleGenerateStory(req, res) {
@@ -86,6 +134,23 @@ class Server {
     }
   }
 
+  async handleAdminDashboard(req, res) {
+    try {
+      const result = await adminRoutes.getAllUsers();
+
+      if (result.success) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ users: result.users }));
+      } else {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: result.error }));
+      }
+    } catch (error) {
+      console.error('Admin dashboard error:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'An error occurred while fetching users' }));
+    }
+  }
   async handleLogin(req, res) {
     try {
       const body = await this.getRequestBody(req);
